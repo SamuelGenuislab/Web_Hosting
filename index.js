@@ -1,38 +1,66 @@
- 51 // ---
-const hamMenuBtn = document.querySelector('.header__main-ham-menu-cont')
-const smallMenu = document.querySelector('.header__sm-menu')
-const headerHamMenuBtn = document.querySelector('.header__main-ham-menu')
-const headerHamMenuCloseBtn = document.querySelector(
-  '.header__main-ham-menu-close'
-)
-const headerSmallMenuLinks = document.querySelectorAll('.header__sm-menu-link')
+const left = document.querySelector(".left");
+const right = document.querySelector(".right");
+const slider = document.querySelector(".slider");
+const images = document.querySelectorAll(".image");
+const bottom = document.querySelector(".bottom");
 
-hamMenuBtn.addEventListener('click', () => {
-  if (smallMenu.classList.contains('header__sm-menu--active')) {
-    smallMenu.classList.remove('header__sm-menu--active')
-  } else {
-    smallMenu.classList.add('header__sm-menu--active')
-  }
-  if (headerHamMenuBtn.classList.contains('d-none')) {
-    headerHamMenuBtn.classList.remove('d-none')
-    headerHamMenuCloseBtn.classList.add('d-none')
-  } else {
-    headerHamMenuBtn.classList.add('d-none')
-    headerHamMenuCloseBtn.classList.remove('d-none')
-  }
-})
+let slideNumber = 1;
+const length = images.length;
 
-for (let i = 0; i < headerSmallMenuLinks.length; i++) {
-  headerSmallMenuLinks[i].addEventListener('click', () => {
-    smallMenu.classList.remove('header__sm-menu--active')
-    headerHamMenuBtn.classList.remove('d-none')
-    headerHamMenuCloseBtn.classList.add('d-none')
-  })
+for (let i = 0; i < length; i++) {
+  const div = document.createElement("div");
+  div.className = "button";
+  bottom.appendChild(div);
 }
 
-// ---
-const headerLogoConatiner = document.querySelector('.header__logo-container')
+const buttons = document.querySelectorAll(".button");
+buttons[0].style.backgroundColor = "white";
 
-headerLogoConatiner.addEventListener('click', () => {
-  location.href = 'index.html'
-})
+const resetBg = () => {
+  buttons.forEach((button) => {
+    button.style.backgroundColor = "transparent";
+  });
+};
+
+buttons.forEach((button, i) => {
+  button.addEventListener("click", () => {
+    resetBg();
+    slider.style.transform = `translateX(-${i * 800}px)`;
+    slideNumber = i + 1;
+    button.style.backgroundColor = "white";
+  });
+});
+
+const nextSlide = () => {
+  slider.style.transform = `translateX(-${slideNumber * 800}px)`;
+  slideNumber++;
+};
+const prevSlide = () => {
+  slider.style.transform = `translateX(-${(slideNumber - 2) * 800}px)`;
+  slideNumber--;
+};
+const getFirstSlide = () => {
+  slider.style.transform = `translateX(0px)`;
+  slideNumber = 1;
+};
+const getLastSlide = () => {
+  slider.style.transform = `translateX(-${(length - 1) * 800}px)`;
+  slideNumber = length;
+};
+
+const changeColor = ()=>{
+  resetBg()
+  buttons[slideNumber-1].style.backgroundColor = "white";
+}
+
+right.addEventListener("click", () => {
+  slideNumber < length ? nextSlide() : getFirstSlide();
+  changeColor()
+});
+
+left.addEventListener("click", () => {
+  slideNumber > 1 ? prevSlide() : getLastSlide();
+  changeColor()
+});
+
+
